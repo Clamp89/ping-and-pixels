@@ -42,7 +42,7 @@ export default async function HomePage() {
 
       {/* Mixed Post Grid */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {posts?.map((post) => (
+        {posts?.map((post: any) => (
           <article
             key={post.id}
             className="bg-slate-900 border border-slate-800 rounded-xl p-6 flex flex-col justify-between hover:border-slate-700 transition-colors shadow-sm"
