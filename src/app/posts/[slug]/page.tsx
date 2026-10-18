@@ -3,7 +3,9 @@ import { notFound } from 'next/navigation';
 import AffiliateCard from '@/components/AffiliateCard';
 import ReactMarkdown from 'react-markdown';
 
-// In Next.js 15+, dynamic route params must be awaited
+// Tells Next.js not to statically prerender this dynamic database page
+export const instant = false;
+
 export default async function BlogPostPage({
   params,
 }: {
