@@ -1,7 +1,11 @@
 import { supabase } from "@/lib/supabaseClient";
 import Link from "next/link";
 
+// Tells Next.js not to statically prerender this dynamic database page
+export const instant = false;
+
 export default async function HomePage() {
+  // Fetch all published posts, ordering by newest first
   const { data, error } = await supabase
     .from("posts")
     .select(`
@@ -32,6 +36,7 @@ export default async function HomePage() {
 
   return (
     <main className="max-w-5xl mx-auto px-4 py-12">
+      {/* Hero Section */}
       <div className="mb-12 border-b border-slate-800 pb-8 text-center">
         <h1 className="text-5xl font-extrabold text-slate-100 mb-4 tracking-tight">
           Ping & Pixels
@@ -41,6 +46,7 @@ export default async function HomePage() {
         </p>
       </div>
 
+      {/* Mixed Post Grid */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {posts?.map((post: any) => {
           // Explicitly cast to 'any' to bypass the array shape inference
@@ -52,6 +58,7 @@ export default async function HomePage() {
               className="bg-slate-900 border border-slate-800 rounded-xl p-6 flex flex-col justify-between hover:border-slate-700 transition-colors shadow-sm"
             >
               <div>
+                {/* Category Badge & Date */}
                 <div className="flex items-center gap-3 mb-4">
                   <span className={`text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-md ${
                     category.slug === 'gaming' 
@@ -67,6 +74,7 @@ export default async function HomePage() {
                   </span>
                 </div>
                 
+                {/* Title & Excerpt */}
                 <h2 className="text-xl font-bold text-slate-100 mb-3 hover:text-emerald-400 transition-colors leading-snug">
                   <Link href={`/posts/${post.slug}`}>{post.title}</Link>
                 </h2>
@@ -75,6 +83,7 @@ export default async function HomePage() {
                 </p>
               </div>
 
+              {/* Read More Link */}
               <Link
                 href={`/posts/${post.slug}`}
                 className="text-sm font-semibold text-slate-300 hover:text-emerald-400 flex items-center gap-1.5 transition-colors group"
@@ -89,6 +98,7 @@ export default async function HomePage() {
         })}
       </div>
       
+      {/* Empty State */}
       {posts?.length === 0 && (
         <div className="text-center py-16 border-2 border-dashed border-slate-800 rounded-xl text-slate-500">
           No posts published yet. Time to start writing!
