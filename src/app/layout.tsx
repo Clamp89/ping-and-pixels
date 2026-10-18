@@ -14,9 +14,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-slate-950 text-slate-200 min-h-screen flex flex-col antialiased">
-        {/* Your global Navbar component would go here */}
-        
-        {/* The flex-grow class forces the content area to expand, pushing the footer down */}
         <div className="flex-grow">
           {children}
         </div>
@@ -30,7 +27,7 @@ export default function RootLayout({
               for purchases made through these links at no additional cost to you.
             </p>
             <p className="text-xs text-slate-600 mt-2">
-              &copy; {new Date().getFullYear()} Ping & Pixels. All rights reserved.
+              &copy; 2026 Ping & Pixels. All rights reserved.
             </p>
           </div>
         </footer>
