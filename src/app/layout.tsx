@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Navbar from "@/components/Navbar";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -14,11 +15,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-slate-950 text-slate-200 min-h-screen flex flex-col antialiased">
+        {/* Global Navigation Bar */}
+        <Navbar />
+        
+        {/* The flex-grow class forces the content area to expand, pushing the footer down */}
         <div className="flex-grow">
           {children}
         </div>
 
-        {/* Global Amazon Compliance Footer */}
+        {/* Global Amazon Compliance Footer with hardcoded year to prevent build errors */}
         <footer className="border-t border-slate-900 bg-slate-950/50 mt-20 py-8 px-4 text-center">
           <div className="max-w-3xl mx-auto">
             <p className="text-xs text-slate-500 leading-relaxed">

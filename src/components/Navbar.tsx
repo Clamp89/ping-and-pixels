@@ -1,30 +1,28 @@
-import Link from 'next/link';
+import Link from "next/link";
 
 export default function Navbar() {
   return (
-    <nav className="w-full bg-slate-900 border-b border-slate-800 text-white sticky top-0 z-50">
-      <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-        {/* Brand Logo */}
+    <nav className="border-b border-slate-900 bg-slate-950/80 backdrop-blur-md sticky top-0 z-50">
+      <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
         <Link 
           href="/" 
-          className="text-xl font-bold tracking-tight text-emerald-400 hover:text-emerald-300 transition-colors"
+          className="text-xl font-extrabold text-slate-100 tracking-tight hover:text-emerald-400 transition-colors"
         >
-          Ping <span className="text-slate-400">&</span> Pixels
+          Ping & Pixels
         </Link>
-
-        {/* Category Navigation */}
-        <div className="flex items-center gap-6 text-sm font-medium">
+        
+        <div className="flex gap-2 sm:gap-4">
           <Link 
             href="/gaming" 
-            className="text-slate-300 hover:text-emerald-400 transition-colors px-3 py-1.5 rounded-md hover:bg-slate-800"
+            className="text-sm font-semibold text-slate-300 hover:text-emerald-400 transition-colors px-3 py-2 rounded-md hover:bg-slate-900"
           >
             Gaming
           </Link>
           <Link 
             href="/tech" 
-            className="text-slate-300 hover:text-cyan-400 transition-colors px-3 py-1.5 rounded-md hover:bg-slate-800"
+            className="text-sm font-semibold text-slate-300 hover:text-cyan-400 transition-colors px-3 py-2 rounded-md hover:bg-slate-900"
           >
-            Tech News
+            Tech
           </Link>
         </div>
       </div>
