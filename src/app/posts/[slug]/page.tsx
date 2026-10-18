@@ -43,8 +43,8 @@ export default async function BlogPostPage({
         </p>
       </div>
 
-      {/* Article Body: Parsed Markdown */}
-      <div className="prose prose-invert prose-emerald prose-lg max-w-none mb-16">
+      {/* Article Body: Parsed Markdown with Increased Line Spacing */}
+      <div className="prose prose-invert prose-emerald prose-lg max-w-none mb-16 prose-p:leading-loose prose-li:leading-loose prose-headings:leading-tight tracking-wide">
         <ReactMarkdown>{post.content}</ReactMarkdown>
       </div>
 
