@@ -65,6 +65,7 @@ export default async function HomePage() {
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {posts?.map((post: any) => {
           const category = post.categories as any;
+          const isGaming = category?.slug === "gaming";
 
           return (
             <article
@@ -74,3 +75,57 @@ export default async function HomePage() {
               <div>
                 {/* Category Badge & Date */}
                 <div className="flex items-center gap-3 mb-4">
+                  <span
+                    className={`text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-md ${
+                      isGaming
+                        ? "bg-emerald-950/60 text-emerald-400 border border-emerald-800/50"
+                        : "bg-cyan-950/60 text-cyan-400 border border-cyan-800/50"
+                    }`}
+                  >
+                    {category?.name}
+                  </span>
+                  <span className="text-xs text-slate-500 font-medium">
+                    {new Date(post.created_at).toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    })}
+                  </span>
+                </div>
+
+                {/* Title & Excerpt */}
+                <h2 className="text-xl font-bold text-slate-100 mb-3 hover:text-emerald-400 transition-colors leading-snug">
+                  <Link href={`/posts/${post.slug}`}>{post.title}</Link>
+                </h2>
+                <p className="text-sm text-slate-400 line-clamp-3 mb-6 leading-relaxed">
+                  {post.excerpt}
+                </p>
+              </div>
+
+              {/* Read More Link */}
+              <Link
+                href={`/posts/${post.slug}`}
+                className="text-sm font-semibold text-slate-300 hover:text-emerald-400 flex items-center gap-1.5 transition-colors group"
+              >
+                Read Article
+                <span
+                  aria-hidden="true"
+                  className="group-hover:translate-x-0.5 transition-transform"
+                >
+                  &rarr;
+                </span>
+              </Link>
+            </article>
+          );
+        })}
+      </div>
+
+      {/* Empty State */}
+      {posts?.length === 0 && (
+        <div className="text-center py-16 border-2 border-dashed border-slate-800 rounded-xl text-slate-500">
+          No posts published yet. Time to start writing!
+        </div>
+      )}
+    </main>
+  );
+}
