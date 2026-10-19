@@ -11,12 +11,12 @@ export default async function CategoryPage({
 }) {
   const { category } = await params;
 
-  // Validate the URL is either /tech or /gaming
   if (category !== "tech" && category !== "gaming") {
     notFound();
   }
 
-  // Fetch posts filtered by the category slug
+  const isGaming = category === "gaming";
+
   const { data, error } = await supabase
     .from("posts")
     .select(`
@@ -28,22 +28,38 @@ export default async function CategoryPage({
       categories!inner(name, slug)
     `)
     .eq("is_published", true)
-    .eq("categories.slug", category) // Filter magic happens here
+    .eq("categories.slug", category)
     .order("created_at", { ascending: false });
 
   const posts = data as any[] | null;
 
   return (
-    <main className="max-w-5xl mx-auto px-4 py-12">
-      <div className="mb-12 border-b border-slate-800 pb-8">
-        <h1 className="text-4xl font-extrabold text-slate-100 mb-2 capitalize tracking-tight">
-          {category} News & Reviews
+    <main className="max-w-5xl mx-auto px-4 py-10 md:py-16">
+      {/* Dynamic Category Hero Section */}
+      <div className="mb-14 border-b border-slate-800/80 pb-10">
+        <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider mb-4 border backdrop-blur-md ${
+          isGaming 
+            ? "border-emerald-500/30 bg-emerald-950/40 text-emerald-400" 
+            : "border-cyan-500/30 bg-cyan-950/40 text-cyan-400"
+        }`}>
+          <span className={`w-2 h-2 rounded-full ${isGaming ? "bg-emerald-400 animate-pulse" : "bg-cyan-400 animate-pulse"}`} />
+          {category} HUB
+        </div>
+
+        <h1 className={`text-4xl md:text-6xl font-black tracking-tight mb-3 capitalize text-transparent bg-clip-text bg-gradient-to-r ${
+          isGaming 
+            ? "from-white via-slate-100 to-emerald-400" 
+            : "from-white via-slate-100 to-cyan-400"
+        }`}>
+          {category} News &amp; Reviews
         </h1>
-        <p className="text-lg text-slate-400">
-          Latest updates in {category}.
+
+        <p className="text-base md:text-lg text-slate-400">
+          Latest updates, detailed breakdowns, and coverage in {category}.
         </p>
       </div>
 
+      {/* Grid */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {posts?.map((post: any) => {
           const postCategory = post.categories as any;
@@ -51,7 +67,7 @@ export default async function CategoryPage({
           return (
             <article
               key={post.id}
-              className="bg-slate-900 border border-slate-800 rounded-xl p-6 flex flex-col justify-between hover:border-slate-700 transition-colors shadow-sm"
+              className="bg-slate-900/90 border border-slate-800/80 rounded-xl p-6 flex flex-col justify-between hover:border-slate-700 transition-colors shadow-sm backdrop-blur-sm"
             >
               <div>
                 <div className="flex items-center gap-3 mb-4">
