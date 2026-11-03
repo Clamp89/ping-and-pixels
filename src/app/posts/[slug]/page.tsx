@@ -3,8 +3,8 @@ import { supabase } from "@/lib/supabaseClient";
 import ReactMarkdown from "react-markdown"; 
 import { notFound } from "next/navigation";
 
-// 1. Tell Next.js to render this page dynamically on the server per request
-export const dynamic = "force-dynamic";
+// 1. Tell Next.js 16 this is a blocking dynamic route (fixes the cacheComponents error)
+export const instant = false;
 
 // 2. params is a Promise in Next.js 16 and must be awaited
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
