@@ -1,14 +1,20 @@
 import Image from "next/image";
 import { supabase } from "@/lib/supabaseClient";
-import ReactMarkdown from "react-markdown"; // Adjust if you use a different markdown parser
+import ReactMarkdown from "react-markdown"; 
 import { notFound } from "next/navigation";
 
-export default async function PostPage({ params }: { params: { slug: string } }) {
-  // Fetch your post data from Supabase
+// 1. Tell Next.js to render this page dynamically on the server per request
+export const dynamic = "force-dynamic";
+
+// 2. params is a Promise in Next.js 16 and must be awaited
+export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+
+  // Fetch your post data from Supabase using the awaited slug
   const { data: post } = await supabase
     .from("posts")
     .select("*")
-    .eq("slug", params.slug)
+    .eq("slug", slug)
     .single();
 
   if (!post) {
