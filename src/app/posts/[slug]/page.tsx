@@ -21,11 +21,11 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   return (
     <main className="min-h-screen pb-24">
       
-      {/* 1. HERO IMAGE (Moved to the very top for an editorial feel) */}
+      {/* 1. HERO IMAGE (Using featured_image_url to match your database) */}
       <div className="w-full max-w-6xl mx-auto pt-6 px-4 mb-10">
         <div className="relative w-full h-[250px] md:h-[450px] rounded-2xl overflow-hidden shadow-2xl border border-gray-800">
           <Image
-            src={post.image_url || "/backdrop.jpg"} 
+            src={post.featured_image_url || "/backdrop.jpg"} 
             alt={post.title}
             fill
             className="object-cover"
@@ -34,7 +34,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         </div>
       </div>
 
-      {/* 2. HEADER (Flows directly into the content now) */}
+      {/* 2. HEADER */}
       <header className="max-w-3xl mx-auto px-6 mb-8">
         <div className="flex items-center gap-2 mb-4">
           <span className="text-emerald-400 font-semibold tracking-wider uppercase text-sm">
@@ -59,7 +59,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         </p>
       </header>
 
-      {/* 3. AFFILIATE BANNER (Using affiliate_link_1 to match your Supabase column) */}
+      {/* 3. AFFILIATE BANNER */}
       {post.affiliate_link_1 ? (
         <div className="max-w-3xl mx-auto px-6 mb-12">
           <div className="p-6 rounded-xl border border-emerald-900/50 bg-emerald-900/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-lg">
