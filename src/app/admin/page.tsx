@@ -119,7 +119,7 @@ export default function AdminDashboard() {
       content,
       category_id: categoryId,
       affiliate_link_1: affiliate1 || null,
-      image_url: imageUrl || null,
+      featured_image_url: imageUrl || null,
       is_published: true,
     });
 
