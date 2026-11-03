@@ -59,8 +59,8 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         </p>
       </header>
 
-      {/* 3. AFFILIATE BANNER (Moved up for better clicks, styled horizontally) */}
-      {post.affiliate_link ? (
+      {/* 3. AFFILIATE BANNER (Using affiliate_link_1 to match your Supabase column) */}
+      {post.affiliate_link_1 ? (
         <div className="max-w-3xl mx-auto px-6 mb-12">
           <div className="p-6 rounded-xl border border-emerald-900/50 bg-emerald-900/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-lg">
             <div>
@@ -68,7 +68,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
               <p className="text-gray-300 text-sm m-0">Check out the current price for the gear mentioned in this article.</p>
             </div>
             <a 
-              href={post.affiliate_link}
+              href={post.affiliate_link_1}
               target="_blank"
               rel="noopener noreferrer"
               className="whitespace-nowrap bg-emerald-500 hover:bg-emerald-400 text-gray-900 font-bold py-2 px-6 rounded transition-colors"
