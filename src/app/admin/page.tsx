@@ -15,6 +15,8 @@ export default function AdminDashboard() {
   const [content, setContent] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [affiliate1, setAffiliate1] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [uploading, setUploading] = useState(false);
   const [categories, setCategories] = useState<any[]>([]);
   const [status, setStatus] = useState({ type: "", message: "" });
 
@@ -25,10 +27,12 @@ export default function AdminDashboard() {
       if (session) fetchCategories();
     });
 
-    supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       if (session) fetchCategories();
     });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   const fetchCategories = async () => {
@@ -49,6 +53,61 @@ export default function AdminDashboard() {
     await supabase.auth.signOut();
   };
 
+  // Handle Hero Image Upload to Supabase Storage bucket 'article-images'
+  async function handleHeroImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    try {
+      setUploading(true);
+      if (!e.target.files || e.target.files.length === 0) return;
+      
+      const file = e.target.files[0];
+      const fileExt = file.name.split('.').pop();
+      const fileName = `hero-${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('article-images')
+        .upload(fileName, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data } = supabase.storage
+        .from('article-images')
+        .getPublicUrl(fileName);
+
+      setImageUrl(data.publicUrl);
+      setStatus({ type: "success", message: "Hero image uploaded successfully!" });
+    } catch (error: any) {
+      setStatus({ type: "error", message: "Error uploading hero image: " + error.message });
+    } finally {
+      setUploading(false);
+    }
+  }
+
+  // Handle inserting an image into the markdown body content
+  async function handleContentImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    try {
+      if (!e.target.files || e.target.files.length === 0) return;
+      const file = e.target.files[0];
+      const fileExt = file.name.split('.').pop();
+      const fileName = `body-${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('article-images')
+        .upload(fileName, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data } = supabase.storage
+        .from('article-images')
+        .getPublicUrl(fileName);
+
+      // Automatically append markdown image tag into the textarea content
+      setContent((prev) => prev + `\n\n![Article Image](${data.publicUrl})\n\n`);
+      setStatus({ type: "success", message: "Body image inserted into markdown!" });
+    } catch (error: any) {
+      setStatus({ type: "error", message: "Error uploading content image: " + error.message });
+    }
+  }
+
   const handlePublish = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus({ type: "loading", message: "Publishing..." });
@@ -60,6 +119,7 @@ export default function AdminDashboard() {
       content,
       category_id: categoryId,
       affiliate_link_1: affiliate1 || null,
+      image_url: imageUrl || null,
       is_published: true,
     });
 
@@ -67,7 +127,12 @@ export default function AdminDashboard() {
       setStatus({ type: "error", message: error.message });
     } else {
       setStatus({ type: "success", message: "Post published successfully!" });
-      setTitle(""); setSlug(""); setExcerpt(""); setContent(""); setAffiliate1("");
+      setTitle(""); 
+      setSlug(""); 
+      setExcerpt(""); 
+      setContent(""); 
+      setAffiliate1(""); 
+      setImageUrl("");
     }
   };
 
@@ -150,13 +215,32 @@ export default function AdminDashboard() {
           </div>
         </div>
 
+        {/* Hero Image Upload Field */}
+        <div>
+          <label className="block text-sm font-medium text-slate-400 mb-2">Hero Image (Top of Page)</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleHeroImageUpload}
+            className="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-emerald-500 file:text-slate-950 hover:file:bg-emerald-400 cursor-pointer"
+          />
+          {uploading && <p className="text-emerald-400 text-sm mt-2">Uploading hero image...</p>}
+          {imageUrl && <p className="text-slate-400 text-xs mt-2 truncate">Hero Image Attached: {imageUrl}</p>}
+        </div>
+
         <div>
           <label className="block text-sm font-medium text-slate-400 mb-2">Short Excerpt (Shows on homepage)</label>
           <textarea value={excerpt} onChange={(e) => setExcerpt(e.target.value)} rows={2} className="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-slate-100" required />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-400 mb-2">Markdown Content</label>
+          <div className="flex justify-between items-center mb-2">
+            <label className="block text-sm font-medium text-slate-400">Markdown Content</label>
+            <label className="cursor-pointer bg-slate-800 hover:bg-slate-700 text-emerald-400 text-xs font-bold py-1.5 px-3 rounded-lg border border-slate-700 transition-colors">
+              <span>+ Insert Image into Body</span>
+              <input type="file" accept="image/*" onChange={handleContentImageUpload} className="hidden" />
+            </label>
+          </div>
           <textarea value={content} onChange={(e) => setContent(e.target.value)} rows={12} className="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-slate-100 font-mono text-sm" required />
         </div>
 
