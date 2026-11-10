@@ -21,7 +21,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   return (
     <main className="min-h-screen pb-24">
       
-      {/* 1. HERO IMAGE (Using featured_image_url to match your database) */}
+      {/* 1. HERO IMAGE */}
       <div className="w-full max-w-6xl mx-auto pt-6 px-4 mb-10">
         <div className="relative w-full h-[250px] md:h-[450px] rounded-2xl overflow-hidden shadow-2xl border border-gray-800">
           <Image
@@ -79,8 +79,8 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         </div>
       ) : null}
 
-      {/* 4. ARTICLE CONTENT */}
-      <article className="max-w-3xl mx-auto px-6 prose prose-invert prose-lg prose-emerald hover:prose-a:text-emerald-400">
+      {/* 4. ARTICLE CONTENT (With enhanced paragraph spacing and dividing lines) */}
+      <article className="max-w-3xl mx-auto px-6 prose prose-invert prose-lg prose-emerald hover:prose-a:text-emerald-400 prose-p:leading-relaxed prose-p:mb-6 prose-hr:border-gray-800 prose-hr:my-8">
         <ReactMarkdown>
           {post.content}
         </ReactMarkdown>
