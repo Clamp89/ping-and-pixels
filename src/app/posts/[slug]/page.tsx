@@ -79,8 +79,8 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         </div>
       ) : null}
 
-      {/* 4. ARTICLE CONTENT (With enhanced paragraph spacing and dividing lines) */}
-      <article className="max-w-3xl mx-auto px-6 prose prose-invert prose-lg prose-emerald hover:prose-a:text-emerald-400 prose-p:leading-relaxed prose-p:mb-6 prose-hr:border-gray-800 prose-hr:my-8">
+      {/* 4. ARTICLE CONTENT (With enhanced spacing and dividing lines) */}
+      <article className="max-w-3xl mx-auto px-6 prose prose-invert prose-lg prose-emerald hover:prose-a:text-emerald-400 space-y-6 prose-p:leading-relaxed prose-hr:border-gray-800 prose-hr:my-8">
         <ReactMarkdown>
           {post.content}
         </ReactMarkdown>
